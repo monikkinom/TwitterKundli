@@ -12,6 +12,14 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
+SETTINGS_DIR = os.path.dirname(__file__)
+PROJECT_PATH = os.path.join(SETTINGS_DIR, os.pardir)
+PROJECT_PATH = os.path.abspath(PROJECT_PATH)
+TEMPLATE_PATH = os.path.join(PROJECT_PATH, 'templates')
+TEMPLATE_DIRS = (
+    TEMPLATE_PATH,
+)
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
@@ -56,6 +64,8 @@ ROOT_URLCONF = 'tk.urls'
 
 WSGI_APPLICATION = 'tk.wsgi.application'
 
+STATIC_URL = '/static/'
+STATICFILES_DIRS = ( os.path.join('static'), )
 
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases

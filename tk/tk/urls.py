@@ -9,7 +9,16 @@ urlpatterns = patterns('',
 
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', views.index, name='index'),
-    url(r'^api/get/all/$',views.process, name='process')
+    url(r'^api/get/sentiment/$',views.sentiment, name='sentiment'),
+    url(r'^api/get/topics/$',views.topics, name='topics'),
+    url(r'^api/get/sleep_pattern/$',views.sleep_pattern, name='sleep_pattern'),
+    url(r'^api/get/top_tweets/$',views.top_tweets, name='top_tweets'),
+    url(r'^api/get/topics_hear_about/$',views.topics_hear_about, name='topics_hear_about'),
+    url(r'^api/get/topics_talk_about/$',views.topics, name='topics_talk_about'),
+    url(r'^api/get/top_tweets/$',views.top_tweets, name='topics_talk_about'),
+    url(r'^api/get/get_profile/$',views.get_profile, name='profile'),
+    url(r'^api/get/get_interest/$',views.get_interest, name='profile'),
+    url(r'^home/$',views.home, name='home'),
 
 
     ###### API ENDPOINTS ##########

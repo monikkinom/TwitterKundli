@@ -255,6 +255,7 @@ def mood(tweet):
         negdenominator = 1
     finalprobofneg = negnumerator * (0.5 / negdenominator)
 
+
     #print "probability of being negative:",finalprobofneg
 
     if finalprobofneg < finalprobofpos:
@@ -283,14 +284,14 @@ def mood(tweet):
             if input.find(sadprofword) != -1:
                 #senddata=conn.send("SadProf")
                 #print "sadprofessional"
-                sentiment = "sadprofessional"
+                sentiment = "sad professional"
                 flag = 1
                 break
         for sadpersonalword in Sadpersonalarray:
             if input.find(sadpersonalword) != -1:
                 #senddata=conn.send("SadPersonal")
                 #print "sadpersonal"
-                sentiment = "sadpersonal"
+                sentiment = "sad personal"
                 flag = 1
                 break
         for fearword in Feararray:
@@ -303,9 +304,11 @@ def mood(tweet):
         if flag == 0:
             #senddata=conn.send("SadPersonal")
             #print "sadpersonal"
-            sentiment = "sadpersonal"
+            sentiment = "sad personal"
 
-    return (score, sentiment)
+    #score calculation
+
+    return (finalprobofpos,finalprobofneg)
 
 
 
