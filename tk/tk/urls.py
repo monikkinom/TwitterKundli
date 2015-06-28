@@ -18,6 +18,7 @@ urlpatterns = patterns('',
     url(r'^api/get/top_tweets/$',views.top_tweets, name='topics_talk_about'),
     url(r'^api/get/get_profile/$',views.get_profile, name='profile'),
     url(r'^api/get/get_interest/$',views.get_interest, name='profile'),
+    url(r'^api/get/get_graph/$',views.get_graph, name='profil'),
     url(r'^home/$',views.home, name='home'),
 
 

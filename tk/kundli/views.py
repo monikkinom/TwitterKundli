@@ -23,7 +23,7 @@ API_SECRET = 'lFi8oSsnR2NsHZUkArGFNx4IMa2unFTTxJm4zRWkC7fd9WlKKr'
 OAUTH_TOKEN = '837804571-OORMT78jbTrbrgiLk2HYKIWyEblUuZN94PWub1pN'
 OAUTH_TOKEN_SECRET = 'QMB9fvepUud1p8ykK68Ye3O0WfSzWeGfn9WQJbWhqJu08'
 
-MEGA_COUNT = 10
+MEGA_COUNT = 25
 
 def index(request):
     return render_to_response("index.html", context_instance=RequestContext(request))
@@ -46,8 +46,10 @@ def sentiment(request):
         final_scores = []
         for i in abc:
             re.sub(r'[^\x00-\x7F]+',' ', i['text'])
-            final_scores.append(mood(i['text']))
-
+            try:
+                final_scores.append(mood(i['text'].decode('utf8')))
+            except:
+                pass
         return HttpResponse(json.dumps(final_scores))
 
     return HttpResponse("Oops")
@@ -223,7 +225,7 @@ def get_interest(request):
             xyz=r.json()
             name=xyz['screen_name']
             topic=uclassify(xyz['description'])
-            print "Name:", str(name), " Interest:", str(topic)
+            # print "Name:", str(name), " Interest:", str(topic)
 
             if interests.has_key(topic):
                 interests[topic]= interests[topic] + "," + name
@@ -231,3 +233,60 @@ def get_interest(request):
                 interests[topic]=name
 
     return HttpResponse(json.dumps(interests))
+
+def get_graph(request):
+
+    URILL = 'https://api.twitter.com/1.1/friends/ids.json'
+
+    if request.GET:
+
+        username = request.GET.get('username')
+        payload = {'screen_name' : username,'count': MEGA_COUNT}
+        auth = OAuth1(API_ID, API_SECRET,
+                  OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
+
+        r = requests.get(URILL,params=payload, auth=auth)
+
+        abc = r.json()
+
+        users= abc['ids']
+
+        url= "https://api.twitter.com/1.1/users/show.json"
+
+        interests={}
+        children={}
+        data={}
+
+        for ids in users:
+            payload={'user_id':ids}
+            r = requests.get(url,params=payload,auth=auth)
+
+            xyz=r.json()
+
+            name=xyz['screen_name']
+            topic=uclassify(xyz['description'])
+            # print "Name:", str(name), " Interest:", str(topic)
+
+            if interests.has_key(topic):
+                interests[topic]= interests[topic] + "@" + name
+            else:
+                interests[topic]=name
+
+        for temp in interests.keys():
+            data[temp]=username
+
+        # print interests
+        # print data
+        for key in interests.keys():
+            temp=interests[key]
+            # print temp
+            temp1=temp.split('@')
+            # print temp1
+            for temp2 in temp1:
+                 data[temp2]=key
+
+        # print json.dumps(interests)
+        # print '\n\n'
+        # print data
+        # data=sorted(data.items(), key=operator.itemgetter(1))
+        return HttpResponse(json.dumps(data))
